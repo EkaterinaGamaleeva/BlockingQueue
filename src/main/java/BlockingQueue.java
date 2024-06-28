@@ -3,38 +3,25 @@ import java.util.List;
 import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.RecursiveAction;
 
-public class BlockingQueue extends RecursiveAction {
-    private List<BlockingQueue> queue = new ArrayList<>();
-
-
-    public synchronized BlockingQueue enqueue() {
-        BlockingQueue task = new BlockingQueue();
-        queue.add(task);
-        notify();
-        return task;
-    }
-
-    public synchronized void dequeue(BlockingQueue blockingQueue) throws InterruptedException {
-        while (queue.size() == 0) {
-            System.out.println("Режим ожидания");
-            wait();
-        }
-        for (int i = 0; i < queue.size(); i++) {
-            if (queue.get(i) == blockingQueue) {
-                System.out.println("Вот поток я нашел" + queue.get(i));
-                queue.get(i).fork();
-                queue.get(i).join();
+public class BlockingQueue {
+    private volatile int size=0;
+    public synchronized void dequeue() {
+        while (size==0) {
+            try {
+                System.out.println("Я в режиме ожидания");
+                wait();
+            }
+            catch (InterruptedException e) {
             }
         }
+        System.out.println("Вышел с режима ожидания");
+        System.out.println(size);
+        notify();
     }
-
-
-    public List<BlockingQueue> getQueue() {
-        return queue;
-    }
-
-    @Override
-    protected void compute() {
-        System.out.println("Поток работает");
+    public synchronized void enqueue(){
+        size++;
+        System.out.println("Новый поток");
+        System.out.println(size);
+        notify();
     }
 }
