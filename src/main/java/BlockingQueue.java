@@ -20,8 +20,8 @@ public class BlockingQueue {
         notify();
     }
     public synchronized void enqueue(){
-//Фиксированный размер 4
-        while (size>4) {
+//Фиксированный размер 3
+        while (size>=4) {
             try {
                 System.out.println("Я жду своей очереди");
                 wait();
