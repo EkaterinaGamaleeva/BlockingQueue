@@ -14,11 +14,21 @@ public class BlockingQueue {
             catch (InterruptedException e) {
             }
         }
+        size--;
         System.out.println("Вышел с режима ожидания");
         System.out.println(size);
         notify();
     }
     public synchronized void enqueue(){
+//Фиксированный размер 4
+        while (size>4) {
+            try {
+                System.out.println("Я жду своей очереди");
+                wait();
+            }
+            catch (InterruptedException e) {
+            }
+        }
         size++;
         System.out.println("Новый поток");
         System.out.println(size);
