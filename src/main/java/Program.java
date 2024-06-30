@@ -22,7 +22,7 @@ class Producer implements Runnable{
         this.blockingQueue=blockingQueue;
     }
     public void run(){
-        for (int i = 0; i <5 ; i++) {
+        for (int i = 0; i <10 ; i++) {
             blockingQueue.enqueue();
         }
     }
@@ -35,7 +35,7 @@ class Consumer implements Runnable{
         this.blockingQueue=blockingQueue;
     }
     public void run(){
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 10; i++) {
             blockingQueue.dequeue();
         }
     }

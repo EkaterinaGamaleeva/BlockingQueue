@@ -4,34 +4,36 @@ import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.RecursiveAction;
 
 public class BlockingQueue {
-    private volatile int size=0;
+
+    private volatile int value=0;
+    private int[] ints =new int[10];
     public synchronized void dequeue() {
-        while (size==0) {
+        while (value==0) {
             try {
-                System.out.println("Я в режиме ожидания");
+                System.out.println("Я в режиме ожидания"+"---"+"в очереди 0 потоков");
                 wait();
             }
             catch (InterruptedException e) {
             }
         }
-        size--;
-        System.out.println("Вышел с режима ожидания");
-        System.out.println(size);
+        System.out.println("Возвращаем поток"+"-"+ints[value]);
+        value--;
+
         notify();
     }
     public synchronized void enqueue(){
-//Фиксированный размер 3
-        while (size>=4) {
+//Фиксированный размер 9
+        while (value>=9) {
             try {
-                System.out.println("Я жду своей очереди");
+                System.out.println("Я жду своей очереди "+"---"+"я 10 поток");
                 wait();
             }
             catch (InterruptedException e) {
             }
         }
-        size++;
-        System.out.println("Новый поток");
-        System.out.println(size);
+        value++;
+        ints[value]=value;
+        System.out.println("Новый поток"+"---"+"номер в очереди"+" "+ints[value]);
         notify();
     }
 }
